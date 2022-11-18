@@ -1,0 +1,3 @@
+Database name: RobotsDB
+
+Collection name: robots
