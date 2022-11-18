@@ -2,7 +2,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { CustomError } from './entities/error.js';
+import { CustomError } from './errors/error.js';
 
 export const app = express();
 
