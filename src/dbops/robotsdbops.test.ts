@@ -22,8 +22,6 @@ describe('Given robotsdbops class', () => {
         await dbConnect();
         await repository.getModel().deleteMany();
         await repository.getModel().insertMany(mockData);
-        const data = await repository.getModel().find();
-        const testIds = [data[0].id, data[1].id];
     });
 
     describe('When we use getAll method', () => {
