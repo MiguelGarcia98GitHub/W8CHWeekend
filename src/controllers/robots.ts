@@ -25,7 +25,7 @@ export class RobotsController {
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
             const robot = await this.dbops.get(req.params.id);
-            resp.json({ robot });
+            resp.json(robot);
         } catch (error) {
             const httpError503 = new HTTPError(
                 503,
