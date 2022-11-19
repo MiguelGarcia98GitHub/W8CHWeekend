@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-    res.send(`BackEnd Robots - W8CHWeekend - use /robots`).end();
+    res.send(`BackEnd - Robots - W8CHWeekend - use /robots`).end();
 });
 
 app.use('/robots', robotsRouter);
