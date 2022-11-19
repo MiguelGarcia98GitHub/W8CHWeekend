@@ -38,12 +38,12 @@ export class RobotsController {
 
     async post(req: Request, resp: Response, next: NextFunction) {
         try {
-            const coffee = await this.dbops.post({
+            const robot = await this.dbops.post({
                 ...req.body,
                 creationDate: new Date().toLocaleDateString(),
             });
             resp.json({
-                coffee,
+                robot,
             });
         } catch (error) {
             const httpError404 = new HTTPError(
