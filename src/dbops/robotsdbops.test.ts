@@ -26,9 +26,36 @@ describe('Given robotsdbops class', () => {
 
     describe('When we use getAll method', () => {
         test('Then it should give us a list of robots', async () => {
+            //
+
+            //
+
             const result = await repository.getAll();
             expect(result[0].name).toEqual(mockData[0].name);
             expect(result[1].name).toEqual(mockData[1].name);
+        });
+    });
+
+    describe('When we use get method', () => {
+        test('Then it should give us a robot', async () => {
+            const newRobot = {
+                name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
+                resistance: '5',
+                speed: '2',
+            };
+            const createRobot = await repository.post(newRobot);
+            const listOfRobots = await repository.getAll();
+            console.log(listOfRobots);
+            const result = await repository.get(listOfRobots[0].id);
+        });
+        test('Then it should give us an error', async () => {
+            const newRobot = {
+                name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
+                resistance: '5',
+                speed: '2',
+            };
+
+            const result = await repository.get('637969271c1d5b4e04b6e5f6');
         });
     });
 

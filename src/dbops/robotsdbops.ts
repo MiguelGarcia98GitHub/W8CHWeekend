@@ -39,9 +39,12 @@ export class RobotsDbOps implements DataInterface<Robot> {
     }
 
     async get(id: id): Promise<Robot> {
-        const result = await this.#Model.findById(id);
-        if (!result) throw new Error('Not found ID');
-        return result as Robot;
+        try {
+            const result = await this.#Model.findById(id);
+            return result as Robot;
+        } catch (error) {
+            return {} as Robot;
+        }
     }
 
     async post(data: ProtoRobot): Promise<Robot> {
