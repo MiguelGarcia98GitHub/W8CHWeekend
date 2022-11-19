@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { DataInterface } from '../dbops/dataInterface';
-import { HTTPError } from '../errors/error';
-import { Robot } from '../interfaces/robot';
+import { DataInterface } from '../dbops/dataInterface.js';
+import { HTTPError } from '../errors/error.js';
+import { Robot } from '../interfaces/robot.js';
 
 export class RobotsController {
     constructor(public dbops: DataInterface<Robot>) {
@@ -38,8 +38,13 @@ export class RobotsController {
 
     async post(req: Request, resp: Response, next: NextFunction) {
         try {
-            const coffee = await this.dbops.post(req.body);
-            resp.json({ coffee });
+            const coffee = await this.dbops.post({
+                ...req.body,
+                creationDate: new Date().toLocaleDateString(),
+            });
+            resp.json({
+                coffee,
+            });
         } catch (error) {
             const httpError404 = new HTTPError(
                 404,
