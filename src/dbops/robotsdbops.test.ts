@@ -1,6 +1,7 @@
 import { RobotsDbOps } from './robotsdbops';
 import { dbConnect } from './../db/dbconnect';
 import { Robot } from '../interfaces/robot';
+import mongoose from 'mongoose';
 const mockData = [
     {
         name: 'PepeRobot1',
@@ -23,6 +24,10 @@ describe('Given robotsdbops class', () => {
         await dbConnect();
         await repository.getModel().deleteMany();
         await repository.getModel().insertMany(mockData);
+    });
+
+    afterAll(() => {
+        mongoose.disconnect();
     });
 
     describe('When we use getAll method', () => {
