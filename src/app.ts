@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { CustomError } from './errors/error.js';
+import { robotsRouter } from './router/robots.js';
 
 export const app = express();
 
@@ -11,8 +12,10 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-    res.send(`BackEnd Robots - W8CHWeekend`).end();
+    res.send(`BackEnd - Robots - W8CHWeekend - use /robots`).end();
 });
+
+app.use('/robots', robotsRouter);
 
 app.use(
     (

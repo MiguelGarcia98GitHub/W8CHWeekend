@@ -39,27 +39,40 @@ export class RobotsDbOps implements DataInterface<Robot> {
     }
 
     async get(id: id): Promise<Robot> {
-        const result = await this.#Model.findById(id);
-        if (!result) throw new Error('Not found ID');
-        return result as Robot;
+        try {
+            const result = await this.#Model.findById(id);
+            return result as Robot;
+        } catch (error) {
+            return {} as Robot;
+        }
     }
 
     async post(data: ProtoRobot): Promise<Robot> {
-        const result = await this.#Model.create(data);
-        return result as Robot;
+        try {
+            const result = await this.#Model.create(data);
+            return result as Robot;
+        } catch (error) {
+            return {} as Robot;
+        }
     }
 
     async patch(id: id, data: Partial<Robot>): Promise<Robot> {
-        const result = await this.#Model.findByIdAndUpdate(id, data, {
-            new: true,
-        });
-        if (!result) throw new Error('Not found id');
-        return result as Robot;
+        try {
+            const result = await this.#Model.findByIdAndUpdate(id, data, {
+                new: true,
+            });
+            return result as Robot;
+        } catch (error) {
+            return {} as Robot;
+        }
     }
 
     async delete(id: id): Promise<void> {
-        const result = await this.#Model.findByIdAndDelete(id);
-        if (result === null) throw new Error('Not found id');
+        try {
+            await this.#Model.findByIdAndDelete(id);
+        } catch (error) {
+            console.log('error1');
+        }
     }
 
     getModel() {

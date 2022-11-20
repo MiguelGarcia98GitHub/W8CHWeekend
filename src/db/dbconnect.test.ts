@@ -8,5 +8,11 @@ describe('Given error.ts', () => {
             expect(typeof dbConnectResult).toBe(typeof mongoose);
             mongoose.disconnect();
         });
+        test('Then it should provide a valid type of mongoose database', async () => {
+            process.env.NODE_ENV = 'nottesting';
+            const dbConnectResult = await dbConnect();
+            expect(typeof dbConnectResult).toBe(typeof mongoose);
+            mongoose.disconnect();
+        });
     });
 });

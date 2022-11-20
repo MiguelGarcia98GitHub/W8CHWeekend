@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { DataInterface } from '../dbops/dataInterface';
-import { HTTPError } from '../errors/error';
-import { Robot } from '../interfaces/robot';
+import { DataInterface } from '../dbops/dataInterface.js';
+import { HTTPError } from '../errors/error.js';
+import { Robot } from '../interfaces/robot.js';
 
 export class RobotsController {
     constructor(public dbops: DataInterface<Robot>) {
@@ -25,7 +25,7 @@ export class RobotsController {
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
             const robot = await this.dbops.get(req.params.id);
-            resp.json({ robot });
+            resp.json(robot);
         } catch (error) {
             const httpError503 = new HTTPError(
                 503,
@@ -38,8 +38,11 @@ export class RobotsController {
 
     async post(req: Request, resp: Response, next: NextFunction) {
         try {
-            const coffee = await this.dbops.post(req.body);
-            resp.json({ coffee });
+            const robot = await this.dbops.post({
+                ...req.body,
+                creationDate: new Date().toLocaleDateString(),
+            });
+            resp.json(robot);
         } catch (error) {
             const httpError404 = new HTTPError(
                 404,
@@ -53,7 +56,7 @@ export class RobotsController {
     async patch(req: Request, resp: Response, next: NextFunction) {
         try {
             const robot = await this.dbops.patch(req.params.id, req.body);
-            resp.json({ robot });
+            resp.json(robot);
         } catch (error) {
             const httpError404 = new HTTPError(
                 404,
