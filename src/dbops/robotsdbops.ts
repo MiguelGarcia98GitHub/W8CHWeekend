@@ -71,7 +71,7 @@ export class RobotsDbOps implements DataInterface<Robot> {
         try {
             const result = await this.#Model.findByIdAndDelete(id);
         } catch (error) {
-            console.log(error);
+            console.log('error');
         }
     }
 
