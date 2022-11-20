@@ -98,7 +98,7 @@ describe('Given robotsdbops class', () => {
             await repository.delete(listOfRobots[0].id);
         });
         test('Then it should give us an error', async () => {
-            await repository.delete('123');
+            await repository.delete('1234');
         });
     });
 });
