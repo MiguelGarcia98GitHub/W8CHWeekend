@@ -7,5 +7,8 @@ export function dbConnect() {
     const uri = `mongodb+srv://${USER}:${PASSWD}@${CLUSTER}/${DBName}?retryWrites=true&w=majority`;
     console.log('URI');
     console.log(uri);
+
+    console.log('URI: ' + uri);
+
     return mongoose.connect(uri);
 }
