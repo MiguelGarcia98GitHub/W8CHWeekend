@@ -1,5 +1,6 @@
 import { RobotsDbOps } from './robotsdbops';
 import { dbConnect } from './../db/dbconnect';
+import { Robot } from '../interfaces/robot';
 const mockData = [
     {
         name: 'PepeRobot1',
@@ -43,19 +44,13 @@ describe('Given robotsdbops class', () => {
                 resistance: '5',
                 speed: '2',
             };
-            const createRobot = await repository.post(newRobot);
+            await repository.post(newRobot);
             const listOfRobots = await repository.getAll();
-            console.log(listOfRobots);
-            const result = await repository.get(listOfRobots[0].id);
+
+            await repository.get(listOfRobots[0].id);
         });
         test('Then it should give us an error', async () => {
-            const newRobot = {
-                name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
-                resistance: '5',
-                speed: '2',
-            };
-
-            const result = await repository.get('637969271c1d5b4e04b6e5f6');
+            await repository.get('123');
         });
     });
 
@@ -68,6 +63,42 @@ describe('Given robotsdbops class', () => {
             };
             const result = await repository.post(newRobot);
             expect(result.speed).toEqual(mockData[0].speed);
+        });
+        test('Then it should give us an error', async () => {
+            await repository.post({} as Robot);
+        });
+    });
+    describe('When we use patch method', () => {
+        test('Then it should patch a robot', async () => {
+            const newRobot = {
+                name: 'PepeRobot' + +Math.floor(Math.random() * 1000000),
+                resistance: '5',
+                speed: '2',
+            };
+            await repository.post(newRobot);
+            const listOfRobots = await repository.getAll();
+            const result = await repository.patch(listOfRobots[0].id, {
+                resistance: '8',
+            });
+            expect(result.speed).toEqual(mockData[0].speed);
+        });
+        test('Then it should give us an error', async () => {
+            await repository.patch('123', {} as Robot);
+        });
+    });
+    describe('When we use delete method', () => {
+        test('Then it should delete a robot', async () => {
+            const newRobot = {
+                name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
+                resistance: '5',
+                speed: '2',
+            };
+            await repository.post(newRobot);
+            const listOfRobots = await repository.getAll();
+            await repository.delete(listOfRobots[0].id);
+        });
+        test('Then it should give us an error', async () => {
+            await repository.delete('123');
         });
     });
 });
