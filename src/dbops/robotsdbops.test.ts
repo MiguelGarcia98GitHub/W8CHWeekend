@@ -50,7 +50,7 @@ describe('Given robotsdbops class', () => {
             await repository.get(listOfRobots[0].id);
         });
         test('Then it should give us an error', async () => {
-            await repository.get('123');
+            await repository.get('123456');
         });
     });
 
