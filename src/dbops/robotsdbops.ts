@@ -69,7 +69,7 @@ export class RobotsDbOps implements DataInterface<Robot> {
 
     async delete(id: id): Promise<void> {
         try {
-            const result = await this.#Model.findByIdAndDelete(id);
+            await this.#Model.findByIdAndDelete(id);
         } catch (error) {
             console.log('error1');
         }
