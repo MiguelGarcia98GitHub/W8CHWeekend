@@ -1,3 +1,32 @@
-Database name: RobotsDB
+21/11/2022
 
-Collection name: robots
+CLIENT -> SERVICE.TS (HACEMOS UN POST CON EL TOKEN) (SIMULAMOS EL FRONTEND AQUÍ)
+
+CONTROLLERS -> USER.TS
+
+ENTITIES -> USER.TS (AÑADIMOS ESQUEMA DE userSchema), y hacemos un userSchema.set donde deleteemos el .__v, el ._id, el .passwd
+
+MIDDLEWARES -> INTERCEPTORS.TS (AÑADIMOS LA LOGICA DE AUTENTIFICACION)
+
+REPOSITORIES -> USER.TS (USA LA LOGICA DE GET, POST Y FIND)
+
+SERVICES -> AUTH.TS (FUNCIONES DE CREATETOKEN, READTOKEN, PASSWDENCRYPT Y PASSWDVALIDATE)
+
+TOKEN: con { userName: 'Paco' }
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlBhY28iLCJpYXQiOjE2NjkwNTI1Njh9.Ce2Lc80SzlwBUVRRZvmMnkOsWYNdy07dI9TaBxeZU4Y
+
+
+FUNCION DE REGISTER ASÍ:
+
+{
+  "name": "Paquito",
+  "email": "paco@gmail.com",
+  "passwd": "abcdfe",
+  "role": "user"
+}
+
+
+FUNCION DE LOGIN CON NAME Y PASSWD
+
+/users/register
+/users/login

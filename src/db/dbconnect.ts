@@ -6,10 +6,6 @@ export function dbConnect() {
         process.env.NODE_ENV !== 'test' ? 'RobotsDB' : 'RobotsDBTesting';
     let uri = `mongodb+srv://${USER}:${PASSWD}`;
     uri += `@${CLUSTER}/${DBName}?retryWrites=true&w=majority`;
-    console.log('URI');
-    console.log(uri);
-
-    console.log('URI: ' + uri);
 
     return mongoose.connect(uri);
 }
