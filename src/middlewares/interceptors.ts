@@ -13,7 +13,6 @@ export const logged = (
     next: NextFunction
 ) => {
     const authString = req.get('Authorization');
-    console.log(authString);
 
     if (!authString || authString?.slice(0, 6) !== 'Bearer') {
         next(
@@ -24,8 +23,6 @@ export const logged = (
     try {
         const token = authString.slice(7);
         req.payload = readToken(token);
-        console.log('PAYLOAD: ');
-        console.log(req.payload);
         next();
     } catch (error) {
         next(

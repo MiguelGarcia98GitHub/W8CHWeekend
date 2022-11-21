@@ -24,5 +24,6 @@ export const passwdValidate = (newPasswd: string, hash: string) => {
 
 const manoloToken = createToken({ userName: 'Miguel' });
 
-console.log(manoloToken);
-console.log(readToken(manoloToken));
+// VERIFY TOKEN CREATION
+// console.log(manoloToken);
+// console.log(readToken(manoloToken));
