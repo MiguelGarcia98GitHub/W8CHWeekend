@@ -13,7 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-    res.send(`Back - Robots - W8CHWeekend - use /robots`).end();
+    res.send(
+        `Back - Robots - W8CHWeekend -   PUBLIC ROUTE: /robots     PUBLIC ROUTE: /users     PRIVATE ROUTE: /robots:id  (use JWT Token)    `
+    ).end();
 });
 
 app.use('/robots', robotsRouter);

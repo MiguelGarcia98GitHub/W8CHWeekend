@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { HTTPError } from '../errors/error';
-import { readToken } from '../services/auth';
+import { HTTPError } from '../errors/error.js';
+import { readToken } from '../services/auth.js';
 
 interface ExtraRequest extends Request {
-    payload: JwtPayload;
+    payload?: JwtPayload;
 }
 
 export const logged = (
@@ -13,7 +13,9 @@ export const logged = (
     next: NextFunction
 ) => {
     const authString = req.get('Authorization');
-    if (!authString || authString?.slice(1, 6) !== 'Bearer') {
+    console.log(authString);
+
+    if (!authString || authString?.slice(0, 6) !== 'Bearer') {
         next(
             new HTTPError(403, 'Forbidden', 'Usuario o contraseña incorrecto')
         );
@@ -22,6 +24,8 @@ export const logged = (
     try {
         const token = authString.slice(7);
         req.payload = readToken(token);
+        console.log('PAYLOAD: ');
+        console.log(req.payload);
         next();
     } catch (error) {
         next(
