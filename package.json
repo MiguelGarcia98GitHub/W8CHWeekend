@@ -20,8 +20,10 @@
         "singleQuote": true
     },
     "dependencies": {
+        "@types/bcryptjs": "^2.4.2",
         "@types/jsonwebtoken": "^8.5.9",
         "@types/mongoose": "^5.11.97",
+        "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "cross-env": "^7.0.3",
         "debug": "^4.3.4",
