@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.get('/', (_req, res) => {
     res.send(
-        `Back - Robots - W8CHWeekend -   PUBLIC ROUTE: /robots     PUBLIC ROUTE: /users     PRIVATE ROUTE: /robots:id  (use JWT Token)    `
+        `Back - Robots - W8CHWeekend -   PUBLIC ROUTE: /robots   PRIVATE ROUTE: /robots:id  (use JWT Token, generate with POST request on /users/login with this account:  "name": "Paquito", "passwd": "abcdfe" )  `
     ).end();
 });
 
