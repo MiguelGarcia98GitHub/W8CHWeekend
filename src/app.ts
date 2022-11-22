@@ -2,9 +2,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { CustomError } from './errors/error.js';
-import { usersRouter } from './router/users.js';
-import { robotsRouter } from './router/robots.js';
+import { CustomError } from './interfaces/error.js';
+import { usersRouter } from './routers/users.js';
+import { robotsRouter } from './routers/robots.js';
 
 export const app = express();
 
@@ -14,7 +14,10 @@ app.use(express.json());
 
 app.get('/', (_req, res) => {
     res.send(
-        `Back - Robots - W8CHWeekend -   PUBLIC ROUTE: /robots   PRIVATE ROUTE: /robots:id  (use JWT Token, generate with POST request on /users/login with this account:  "name": "Paquito", "passwd": "abcdfe" )  `
+        `Back - Robots - W8CHWeekend -   
+        PUBLIC ROUTE:  GET /robots   
+        PRIVATE ROUTE: GET /robots:id  (use JWT Token, generate with POST request on /users/login with this account:  "name": "Paquito", "passwd": "abcdfe" )
+        `
     ).end();
 });
 

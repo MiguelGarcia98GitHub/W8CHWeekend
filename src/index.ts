@@ -1,7 +1,7 @@
 import http from 'http';
 import { app } from './app.js';
 import { dbConnect } from './db/dbconnect.js';
-import { CustomError } from './errors/error.js';
+import { CustomError } from './interfaces/error.js';
 
 const port = 3300;
 const server = http.createServer(app);

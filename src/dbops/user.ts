@@ -4,7 +4,7 @@ import { passwdEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repo.js';
 
 export class UserRepository implements BasicRepo<User> {
-    #Model = model('User', userSchema, 'users');
+    #Model = model('Coffee', userSchema, 'coffees');
 
     async get(id: id): Promise<User> {
         const result = await this.#Model.findById(id); //as User;
@@ -20,8 +20,8 @@ export class UserRepository implements BasicRepo<User> {
         return result as User;
     }
 
-    async find(search: any): Promise<User> {
-        console.log(search);
+    async find(search: { [key: string]: string }): Promise<User> {
+        console.log({ search });
         const result = await this.#Model.findOne(search); //as User;
         if (!result) throw new Error('Not found id');
         return result as unknown as User;

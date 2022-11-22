@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { HTTPError } from '../errors/error.js';
+import { RobotRepository } from '../dbops/robotsdbops.js';
+import { HTTPError } from '../interfaces/error.js';
 import { readToken } from '../services/auth.js';
 
-interface ExtraRequest extends Request {
+export interface ExtraRequest extends Request {
     payload?: JwtPayload;
 }
 
@@ -13,8 +14,7 @@ export const logged = (
     next: NextFunction
 ) => {
     const authString = req.get('Authorization');
-
-    if (!authString || authString?.slice(0, 6) !== 'Bearer') {
+    if (!authString || !authString?.startsWith('Bearer')) {
         next(
             new HTTPError(403, 'Forbidden', 'Usuario o contraseña incorrecto')
         );
@@ -22,11 +22,38 @@ export const logged = (
     }
     try {
         const token = authString.slice(7);
+        readToken(token);
+        console.log('READTOKEN(TOKEN) BELOW:');
+        console.log(readToken(token));
         req.payload = readToken(token);
         next();
     } catch (error) {
         next(
             new HTTPError(403, 'Forbidden', 'Usuario o contraseña incorrecto')
         );
+    }
+};
+
+export const who = async (
+    req: ExtraRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    const repo = new RobotRepository();
+    try {
+        const robot = await repo.get(req.params.id);
+        console.log(robot);
+        if (robot.owner?.toString() !== (req.payload as JwtPayload).id) {
+            next(
+                new HTTPError(
+                    403,
+                    'Forbidden',
+                    'Usuario o contraseña incorrecto'
+                )
+            );
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
 };
