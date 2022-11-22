@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
-import { HTTPError } from '../errors/error.js';
-import { User } from '../interfaces/user';
-import { BasicRepo } from '../dbops/repo';
+import { BasicRepo, Repo } from '../dbops/repo.js';
+import { Robot } from '../entities/robot.js';
+import { User } from '../entities/user.js';
+import { HTTPError } from '../interfaces/error.js';
+
 import { createToken, passwdValidate } from '../services/auth.js';
 
 export class UserController {
-    constructor(public readonly repository: BasicRepo<User>) {
+    constructor(
+        public readonly repository: BasicRepo<User>,
+        public readonly robotRepo: Repo<Robot>
+    ) {
         //
     }
 
@@ -25,20 +30,26 @@ export class UserController {
 
     async login(req: Request, resp: Response, next: NextFunction) {
         try {
+            console.log(req.body); // {}
             const user = await this.repository.find({ name: req.body.name });
+            user.id;
             const isPasswdValid = await passwdValidate(
                 req.body.passwd,
                 user.passwd
             );
             if (!isPasswdValid) throw new Error();
-            const token = createToken({ userName: user.name });
+            const token = createToken({
+                id: user.id,
+                name: user.name,
+                role: user.role,
+            });
             resp.json({ token });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
     }
     #createHttpError(error: Error) {
-        if (error.message === 'Not found id') {
+        if ((error as Error).message === 'Not found id') {
             const httpError = new HTTPError(
                 404,
                 'Not Found',

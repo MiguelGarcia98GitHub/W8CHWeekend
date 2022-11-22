@@ -1,15 +1,30 @@
 import jwt from 'jsonwebtoken';
-import { SECRET } from '../config.js';
 import bc from 'bcryptjs';
+import { SECRET } from '../config.js';
+
+export const getSecret = (secret = SECRET) => {
+    if (typeof secret !== 'string' || secret === '') {
+        throw new Error('Bad Secret for token creation');
+    }
+    return secret;
+};
+
+
+type TokenPayload = {
+    id: string;
+    name: string;
+    role: string;
+};
+
 
 export const createToken = (payload: { userName: string }) => {
     if (typeof SECRET !== 'string') throw new Error();
     return jwt.sign(payload, SECRET);
+
 };
 
 export const readToken = (token: string) => {
-    if (typeof SECRET !== 'string') throw new Error();
-    const payload = jwt.verify(token, SECRET);
+    const payload = jwt.verify(token, getSecret());
     if (typeof payload === 'string') throw new Error('Token not valid');
     return payload;
 };
@@ -22,7 +37,4 @@ export const passwdValidate = (newPasswd: string, hash: string) => {
     return bc.compare(newPasswd, hash);
 };
 
-// VERIFY TOKEN CREATION
-// const manoloToken = createToken({ userName: 'Miguel' });
-// console.log(manoloToken);
-// console.log(readToken(manoloToken));
+

@@ -1,83 +1,94 @@
 import { NextFunction, Request, Response } from 'express';
-import { DataInterface } from '../dbops/dataInterface.js';
-import { HTTPError } from '../errors/error.js';
-import { Robot } from '../interfaces/robot.js';
+import { BasicRepo, Repo } from '../dbops/repo.js';
+import { HTTPError } from '../interfaces/error.js';
+import { ExtraRequest } from '../middlewares/interceptors.js';
+import { User } from '../entities/user.js';
+import { Robot } from '../entities/robot.js';
 
-export class RobotsController {
-    constructor(public dbops: DataInterface<Robot>) {
+export class RobotController {
+    constructor(
+        public repository: Repo<Robot>,
+        public userRepo: BasicRepo<User>
+    ) {
         //
     }
-
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {
-            const robots = await this.dbops.getAll();
+            console.log('RobotController getAll');
+            const robots = await this.repository.getAll();
             resp.json({ robots });
         } catch (error) {
-            const httpError503 = new HTTPError(
+            const httpError = new HTTPError(
                 503,
                 'Service unavailable',
                 (error as Error).message
             );
-            next(httpError503);
+            next(httpError);
         }
     }
 
     async get(req: Request, resp: Response, next: NextFunction) {
         try {
-            const robot = await this.dbops.get(req.params.id);
-            resp.json(robot);
+            const robot = await this.repository.get(req.params.id);
+            resp.json({ robot });
         } catch (error) {
-            const httpError503 = new HTTPError(
+            next(this.#createHttpError(error as Error));
+        }
+    }
+
+    async post(req: ExtraRequest, resp: Response, next: NextFunction) {
+        console.log('REQ PAYLOAD BELOW:');
+        console.log(req.payload);
+        try {
+            if (!req.payload) {
+                throw new Error('Invalid payload');
+            }
+            const user = await this.userRepo.get(req.payload.id);
+            req.body.owner = user.id;
+            const robot = await this.repository.post(req.body);
+            resp.json({ robot });
+        } catch (error) {
+            const httpError = new HTTPError(
                 503,
                 'Service unavailable',
                 (error as Error).message
             );
-            next(httpError503);
-        }
-    }
-
-    async post(req: Request, resp: Response, next: NextFunction) {
-        try {
-            const robot = await this.dbops.post({
-                ...req.body,
-                creationDate: new Date().toLocaleDateString(),
-            });
-            resp.json(robot);
-        } catch (error) {
-            const httpError404 = new HTTPError(
-                404,
-                'ID not valid (post request error)',
-                (error as Error).message
-            );
-            next(httpError404);
+            next(httpError);
         }
     }
 
     async patch(req: Request, resp: Response, next: NextFunction) {
         try {
-            const robot = await this.dbops.patch(req.params.id, req.body);
-            resp.json(robot);
+            const robot = await this.repository.patch(req.params.id, req.body);
+            resp.json({ robot });
         } catch (error) {
-            const httpError404 = new HTTPError(
-                404,
-                'ID not valid (patch request error)',
-                (error as Error).message
-            );
-            next(httpError404);
+            next(this.#createHttpError(error as Error));
         }
     }
 
     async delete(req: Request, resp: Response, next: NextFunction) {
         try {
-            await this.dbops.delete(req.params.id);
+            await this.repository.delete(req.params.id);
             resp.json({});
         } catch (error) {
-            const httpError404 = new HTTPError(
+            next(this.#createHttpError(error as Error));
+        }
+    }
+
+    #createHttpError(error: Error) {
+        if ((error as Error).message === 'Not found id') {
+            const httpError = new HTTPError(
                 404,
-                'ID not valid (delete request error)',
+                'Not Found',
                 (error as Error).message
             );
-            next(httpError404);
+            return httpError;
         }
+        const httpError = new HTTPError(
+            503,
+            'Service unavailable',
+            (error as Error).message
+        );
+        return httpError;
     }
 }
