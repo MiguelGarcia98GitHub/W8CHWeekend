@@ -4,7 +4,7 @@ import bc from 'bcryptjs';
 
 export const createToken = (payload: { userName: string }) => {
     if (typeof SECRET !== 'string') throw new Error();
-    return jwt.sign(payload, SECRET as string);
+    return jwt.sign(payload, SECRET);
 };
 
 export const readToken = (token: string) => {
@@ -22,8 +22,7 @@ export const passwdValidate = (newPasswd: string, hash: string) => {
     return bc.compare(newPasswd, hash);
 };
 
-const manoloToken = createToken({ userName: 'Miguel' });
-
 // VERIFY TOKEN CREATION
+// const manoloToken = createToken({ userName: 'Miguel' });
 // console.log(manoloToken);
 // console.log(readToken(manoloToken));
