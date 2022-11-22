@@ -9,14 +9,18 @@ export const getSecret = (secret = SECRET) => {
     return secret;
 };
 
+
 type TokenPayload = {
     id: string;
     name: string;
     role: string;
 };
 
-export const createToken = (payload: TokenPayload) => {
-    return jwt.sign(payload, getSecret());
+
+export const createToken = (payload: { userName: string }) => {
+    if (typeof SECRET !== 'string') throw new Error();
+    return jwt.sign(payload, SECRET);
+
 };
 
 export const readToken = (token: string) => {
@@ -32,3 +36,5 @@ export const passwdEncrypt = (passwd: string) => {
 export const passwdValidate = (newPasswd: string, hash: string) => {
     return bc.compare(newPasswd, hash);
 };
+
+
