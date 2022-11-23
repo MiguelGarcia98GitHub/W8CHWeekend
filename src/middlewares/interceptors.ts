@@ -23,8 +23,8 @@ export const logged = (
     try {
         const token = authString.slice(7);
         readToken(token);
-        console.log('READTOKEN(TOKEN) BELOW:');
-        console.log(readToken(token));
+        console.log('PAYLOAD BELOW:');
+
         req.payload = readToken(token);
         next();
     } catch (error) {

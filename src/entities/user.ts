@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { id } from '../dbops/repo';
 
 export type ProtoUser = {
     name?: string;
@@ -9,6 +10,7 @@ export type ProtoUser = {
 };
 
 export type User = {
+    _id: id;
     id: string;
     name: string;
     email: string;
@@ -28,8 +30,8 @@ export const userSchema = new Schema<User>({
     role: String,
     robots: [
         {
-            type: mongoose.Types.ObjectId,
-            ref: 'Robots',
+            type: Schema.Types.ObjectId,
+            ref: 'Robot',
         },
     ],
 });

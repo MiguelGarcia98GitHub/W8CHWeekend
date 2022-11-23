@@ -4,10 +4,18 @@ import { passwdEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repo.js';
 
 export class UserRepository implements BasicRepo<User> {
-    #Model = model('Coffee', userSchema, 'coffees');
+    #Model = model('User', userSchema, 'users');
 
     async get(id: id): Promise<User> {
         const result = await this.#Model.findById(id); //as User;
+        if (!result) throw new Error('Not found id');
+        return result as User;
+    }
+
+    async patch(id: id, data: Partial<User>): Promise<User> {
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
         if (!result) throw new Error('Not found id');
         return result as User;
     }
