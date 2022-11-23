@@ -38,16 +38,7 @@ export class RobotRepository implements Repo<Robot> {
         const owneruser = await newUserRepo.get(data?.owner as any);
         console.log('OWNER USER: ');
         console.log(owneruser);
-
-        // await newUserRepo.patch(owneruser?._id, {...newUser, {$push: {robots: data}}});
         const Model1 = model('User', userSchema, 'users');
-
-        // console.log(
-        //     await Model1.updateOne(
-        //         { id: owneruser.id },
-        //         { $push: { robots: data } }
-        //     )
-        // );
 
         const result = await this.#Model.create(data);
         const findIDofResult: any = await this.#Model.find({
