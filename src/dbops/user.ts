@@ -12,6 +12,14 @@ export class UserRepository implements BasicRepo<User> {
         return result as User;
     }
 
+    async patch(id: id, data: Partial<User>): Promise<User> {
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+        if (!result) throw new Error('Not found id');
+        return result as User;
+    }
+
     async post(data: Partial<User>): Promise<User> {
         // ESTO HACE REGISTER
         if (typeof data.passwd !== 'string') throw new Error('');

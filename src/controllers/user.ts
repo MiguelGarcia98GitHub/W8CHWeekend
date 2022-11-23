@@ -48,6 +48,7 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
+
     #createHttpError(error: Error) {
         if ((error as Error).message === 'Not found id') {
             const httpError = new HTTPError(

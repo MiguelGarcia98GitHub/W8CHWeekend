@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types } from 'mongoose';
 
 export type ProtoRobot = {
+    id: any;
     name?: string;
     resistance?: number;
     speed?: number;
@@ -34,13 +35,5 @@ export const robotSchema = new Schema<Robot>({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-    },
-});
-
-robotSchema.set('toJSON', {
-    transform: (_document, returnedObject) => {
-        returnedObject.id = returnedObject._id;
-        delete returnedObject.__v;
-        delete returnedObject._id;
     },
 });

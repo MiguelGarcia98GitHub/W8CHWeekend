@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { id } from '../dbops/repo';
 
 export type ProtoUser = {
     name?: string;
@@ -9,6 +10,7 @@ export type ProtoUser = {
 };
 
 export type User = {
+    _id: id;
     id: string;
     name: string;
     email: string;
