@@ -24,7 +24,7 @@ export class RobotRepository implements Repo<Robot> {
     }): Promise<Robot> {
         console.log({ search });
         const result = await this.#Model.findOne(search); //as Robot;
-        if (!result) throw new Error('Not found id');
+        // if (!result) throw new Error('Not found id');
         return result as unknown as Robot;
     }
 

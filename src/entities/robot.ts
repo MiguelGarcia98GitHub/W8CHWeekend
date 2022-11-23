@@ -1,11 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 
 export type ProtoRobot = {
     name?: string;
     resistance?: number;
     speed?: number;
     image?: string;
-    owner?: string;
+    owner?: Types.ObjectId;
 };
 
 export type Robot = {
@@ -14,7 +14,7 @@ export type Robot = {
     resistance: number;
     speed: number;
     image: string;
-    owner: string;
+    owner?: Types.ObjectId;
 };
 
 export const robotSchema = new Schema<Robot>({
@@ -32,7 +32,7 @@ export const robotSchema = new Schema<Robot>({
     speed: { type: Number, min: 0, max: 10 },
     resistance: { type: Number, min: 0, max: 10 },
     owner: {
-        type: String,
+        type: Schema.Types.ObjectId,
         ref: 'User',
     },
 });

@@ -28,8 +28,8 @@ export const userSchema = new Schema<User>({
     role: String,
     robots: [
         {
-            type: mongoose.Types.ObjectId,
-            ref: 'Robots',
+            type: Schema.Types.ObjectId,
+            ref: 'Robot',
         },
     ],
 });
