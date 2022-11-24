@@ -32,13 +32,12 @@ export class UserController {
         try {
             console.log(req.body); // {}
             const user = await this.repository.find({ name: req.body.name });
-            user.id;
             const isPasswdValid = await passwdValidate(
                 req.body.passwd,
                 user.passwd
             );
             if (!isPasswdValid) throw new Error();
-            const token = createToken({
+            const token: any = createToken({
                 id: user.id,
                 name: user.name,
                 role: user.role,
