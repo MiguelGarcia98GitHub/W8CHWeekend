@@ -37,7 +37,7 @@ export class UserController {
                 user.passwd
             );
             if (!isPasswdValid) throw new Error();
-            const token: any = createToken({
+            const token = createToken({
                 id: user.id,
                 name: user.name,
                 role: user.role,

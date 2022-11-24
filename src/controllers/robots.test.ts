@@ -161,3 +161,5 @@
 //         await robotsController.delete(req as Request, resp as Response, next);
 //     });
 // });
+
+export {};

@@ -16,6 +16,7 @@ describe('Given error.ts', () => {
             process.env.NODE_ENV = 'nottesting';
             const dbConnectResult = await dbConnect();
             expect(typeof dbConnectResult).toBe(typeof mongoose);
+            process.env.NODE_ENV = 'test';
             mongoose.disconnect();
         });
     });
