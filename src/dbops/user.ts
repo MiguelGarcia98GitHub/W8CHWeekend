@@ -12,13 +12,13 @@ export class UserRepository implements BasicRepo<User> {
         return result as User;
     }
 
-    async patch(id: id, data: Partial<User>): Promise<User> {
-        const result = await this.#Model.findByIdAndUpdate(id, data, {
-            new: true,
-        });
-        if (!result) throw new Error('Not found id');
-        return result as User;
-    }
+    // async patch(id: id, data: Partial<User>): Promise<User> {
+    //     const result = await this.#Model.findByIdAndUpdate(id, data, {
+    //         new: true,
+    //     });
+    //     if (!result) throw new Error('Not found id');
+    //     return result as User;
+    // }
 
     async post(data: Partial<User>): Promise<User> {
         // ESTO HACE REGISTER
@@ -28,10 +28,10 @@ export class UserRepository implements BasicRepo<User> {
         return result as User;
     }
 
-    async find(search: { [key: string]: string }): Promise<User> {
-        console.log({ search });
-        const result = await this.#Model.findOne(search); //as User;
-        if (!result) throw new Error('Not found id');
-        return result as unknown as User;
-    }
+    // async find(search: { [key: string]: string }): Promise<User> {
+    //     console.log({ search });
+    //     const result = await this.#Model.findOne(search); //as User;
+    //     if (!result) throw new Error('Not found id');
+    //     return result as unknown as User;
+    // }
 }
