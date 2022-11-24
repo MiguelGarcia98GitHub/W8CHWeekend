@@ -17,7 +17,7 @@ server.on('listening', () => {
                 ? `http://localhost:${addr?.port}`
                 : `port ${addr?.port}`;
     }
-    console.log(`Listening on:  ${bind}`);
+    console.log(`Listening on:   ${bind}`);
 });
 
 server.on('error', (error: CustomError, response: http.ServerResponse) => {
