@@ -5,6 +5,7 @@ export type id = number | string; //Types.ObjectId;
 export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
     post: (data: Partial<T>) => Promise<T>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     find: (data: any) => Promise<T>;
 }
 
