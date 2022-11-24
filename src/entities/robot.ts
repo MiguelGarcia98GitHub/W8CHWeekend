@@ -1,7 +1,7 @@
 import mongoose, { Schema, Types } from 'mongoose';
 
 export type ProtoRobot = {
-    id: any;
+    id: string;
     name?: string;
     resistance?: number;
     speed?: number;
@@ -10,6 +10,7 @@ export type ProtoRobot = {
 };
 
 export type Robot = {
+    _id?: typeof mongoose.Types.ObjectId;
     id: typeof mongoose.Types.ObjectId;
     name: string;
     resistance: number;

@@ -30,7 +30,7 @@ export class RobotRepository implements Repo<Robot> {
         return result as unknown as Robot;
     }
 
-    async post(data: any): Promise<any> {
+    async post(data: Partial<Robot>): Promise<Robot> {
         //TODO
         console.log('DATA: ');
         console.log(data);
@@ -41,15 +41,11 @@ export class RobotRepository implements Repo<Robot> {
         const Model1 = model('User', userSchema, 'users');
 
         const result = await this.#Model.create(data);
-        const findIDofResult: any = await this.#Model.find({
+        const findResultByName = await this.#Model.find({
             name: result.name,
         });
-        console.log('ID OF RESULT:');
-        const IDofResult = findIDofResult[0]._id;
-        console.log('FIND ID OF RESULT:');
-        console.log(findIDofResult);
         console.log('FIND RESULT ID: ');
-        console.log(findIDofResult._id);
+        console.log(await findResultByName['_id' as unknown as number]);
         console.log('RESULT:');
         console.log(result);
         console.log('ID:');
@@ -60,7 +56,10 @@ export class RobotRepository implements Repo<Robot> {
             owneruser._id,
             {
                 $push: {
-                    robots: [findIDofResult[0]._id as mongoose.Types.ObjectId],
+                    robots: [
+                        findResultByName[0]
+                            ._id as unknown as mongoose.Types.ObjectId,
+                    ],
                 },
             },
             { new: true }
