@@ -19,7 +19,8 @@
     "prettier": {
         "singleQuote": true
     },
-    "dependencies": {
+    "dependencies": {},
+    "devDependencies": {
         "@types/bcryptjs": "^2.4.2",
         "@types/jsonwebtoken": "^8.5.9",
         "@types/mongoose": "^5.11.97",
@@ -52,7 +53,6 @@
         "ts-jest": "^29.0.3",
         "typescript": "^4.8.4"
     },
-    "devDependencies": {},
     "babel": {
         "env": {
             "test": {
