@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose';
+import mongoose, { model, Schema, Types } from 'mongoose';
 
 export type ProtoRobot = {
     id: string;
@@ -38,3 +38,13 @@ export const robotSchema = new Schema<Robot>({
         ref: 'User',
     },
 });
+
+// robotSchema.set('toJSON', {
+//     transform: (_document, returnedObject) => {
+//         returnedObject.id = returnedObject._id;
+//         delete returnedObject.__v;
+//         delete returnedObject._id;
+//     },
+// });
+
+export const Robot = model<Robot>('Robot', robotSchema, 'robots');

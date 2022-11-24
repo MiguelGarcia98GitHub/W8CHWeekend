@@ -1,115 +1,141 @@
-// import { RobotsDbOps } from './robotsdbops';
-// import { dbConnect } from './../db/dbconnect';
-// import { Robot } from '../entities/robot';
-// import mongoose from 'mongoose';
-// const mockData = [
-//     {
-//         name: 'PepeRobot1',
-//         resistance: '5',
-//         speed: '2',
-//         creationDate: new Date().toLocaleDateString(),
-//     },
-//     {
-//         name: 'PepeRobot2',
-//         resistance: '3',
-//         speed: '4',
-//         creationDate: new Date().toLocaleDateString(),
-//     },
-// ];
+import { dbConnect } from './../db/dbconnect';
+import { Robot } from '../entities/robot';
+import mongoose, { ObjectId } from 'mongoose';
+import { RobotRepository } from './robotsdbops';
 
-// describe('Given robotsdbops class', () => {
-//     const repository = new RobotsDbOps();
+describe('Given a singleton instance of the class "RobotRepository"', () => {
+    const mockData = [{ name: 'PepeBot' }, { name: 'LuluBot' }];
+    const setUpCollection = async () => {
+        await dbConnect();
+        await Robot.deleteMany();
+        await Robot.insertMany(mockData);
+        const data = await Robot.find();
+        return [
+            data[0]._id as unknown as string,
+            data[1]._id as unknown as string,
+        ];
+    };
 
-//     beforeAll(async () => {
-//         await dbConnect();
-//         await repository.getModel().deleteMany();
-//         await repository.getModel().insertMany(mockData);
-//     });
+    const repository = RobotRepository.getInstance();
 
-//     afterAll(() => {
-//         mongoose.disconnect();
-//     });
+    const badFormattedId = '1';
+    const invalidId = '537b422da27b69c98b1916e1';
+    let testIds: Array<string>;
 
-//     describe('When we use getAll method', () => {
-//         test('Then it should give us a list of robots', async () => {
-//             //
+    beforeAll(async () => {
+        console.log(await setUpCollection());
+        testIds = await setUpCollection();
+        console.log(testIds);
+    });
+    describe('When it has been run getAll and it has called Model.find', () => {
+        test('Then it returns the robots in the collection', async () => {
+            const spyModel = jest.spyOn(Robot, 'find');
+            const result = await repository.getAll();
+            expect(spyModel).toHaveBeenCalled();
+            expect(result[0].name).toEqual(mockData[0].name);
+        });
+    });
 
-//             //
+    describe('When it has been run get and it has called Model.findById', () => {
+        const spyModel = jest.spyOn(Robot, 'findById');
+        test('Then, if the ID has been valid, it should be returned the robot', async () => {
+            const result = await repository.get(testIds[0]);
+            expect(spyModel).toHaveBeenCalled();
+            expect(result.name).toEqual(mockData[0].name);
+        });
 
-//             const result = await repository.getAll();
-//             expect(result[0].name).toEqual(mockData[0].name);
-//             expect(result[1].name).toEqual(mockData[1].name);
-//         });
-//     });
+        test('Then, if the ID has been bad formatted, it should be thrown an Cast error', async () => {
+            expect(async () => {
+                await repository.get(badFormattedId);
+            }).rejects.toThrowError(mongoose.Error.CastError);
+            expect(spyModel).toHaveBeenCalled();
+        });
 
-//     describe('When we use get method', () => {
-//         test('Then it should give us a robot', async () => {
-//             const newRobot = {
-//                 name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
-//                 resistance: '5',
-//                 speed: '2',
-//             };
-//             await repository.post(newRobot);
-//             const listOfRobots = await repository.getAll();
+        test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
+            expect(async () => {
+                await repository.get(invalidId);
+            }).rejects.toThrowError(mongoose.MongooseError);
+            expect(spyModel).toHaveBeenCalled();
+        });
+    });
 
-//             await repository.get(listOfRobots[0].id);
-//         });
-//         test('Then it should give us an error', async () => {
-//             await repository.get('123456');
-//         });
-//     });
+    describe('When it has been run find and it has called Model.findOne', () => {
+        const spyModel = jest.spyOn(Robot, 'findOne');
+        test('Then, if the data has been valid, it should be returned the found robot ', async () => {
+            const result = await repository.find(mockData[0]);
+        });
 
-//     describe('When we use post method', () => {
-//         test('Then it should create a new robot', async () => {
-//             const newRobot = {
-//                 name: 'PepeRobot123',
-//                 resistance: '5',
-//                 speed: '2',
-//             };
-//             const result = await repository.post(newRobot);
-//             expect(result.speed).toEqual(mockData[0].speed);
-//         });
-//         test('Then it should give us an error', async () => {
-//             await repository.post({} as Robot);
-//         });
-//     });
-//     describe('When we use patch method', () => {
-//         test('Then it should patch a robot', async () => {
-//             const newRobot = {
-//                 name: 'PepeRobot' + +Math.floor(Math.random() * 1000000),
-//                 resistance: '5',
-//                 speed: '2',
-//             };
-//             await repository.post(newRobot);
-//             const listOfRobots = await repository.getAll();
-//             const result = await repository.patch(listOfRobots[0].id, {
-//                 resistance: '8',
-//             });
-//             expect(result.speed).toEqual(mockData[0].speed);
-//         });
-//         test('Then it should give us an error', async () => {
-//             await repository.patch('123', {} as Robot);
-//         });
-//     });
-//     describe('When we use delete method', () => {
-//         test('Then it should delete a robot', async () => {
-//             const newRobot = {
-//                 name: 'PepeRobot' + Math.floor(Math.random() * 1000000),
-//                 resistance: '5',
-//                 speed: '2',
-//             };
-//             await repository.post(newRobot);
-//             const listOfRobots = await repository.getAll();
-//             await repository.delete(listOfRobots[0].id);
-//         });
-//         test('Then it should give us an error', async () => {
-//             await repository.delete('123');
-//         });
-//     });
-// });
+        test('Then, if the data has been invalid, it should be throw an error', async () => {
+            expect(async () => {
+                await repository.find({ name: 'NoBot' });
+            }).rejects.toThrowError(mongoose.MongooseError);
+        });
+    });
 
-test('fake test to fix deploy', () => {
-    expect(1).toBe(1);
+    describe('When it has been run post and it has called Model.create', () => {
+        const spyModel = jest.spyOn(Robot, 'create');
+        test('Then, if the data has been valid, it should be returned the new robot', async () => {
+            const newRobot = { name: 'OldBot' };
+            const result = await repository.post(newRobot);
+        });
+        test('Then, if the data has been valid but without date, it should be returned the new robot', async () => {
+            const newRobot = { name: 'BigBot', speed: 5, resistance: 7 };
+            const result = await repository.post(newRobot);
+        });
+        // test('Then, if the data has been valid but with invalid date, it should be returned the new robot', async () => {
+        //     const newRobot = { name: 'SimpleBot', date: 'Enero' };
+        //     const result = await repository.post(newRobot);
+        //     expect(spyModel).toHaveBeenCalled();
+        //     expect(result.name).toEqual(newRobot.name);
+        // });
+
+        // test('Then, if the data has been invalid, it should be thrown a Validation error', () => {
+        //     const newRobot = {};
+        //     expect(async () => {
+        //         await repository.post(newRobot);
+        //     }).rejects.toThrowError(mongoose.Error.ValidationError);
+        //     expect(spyModel).toHaveBeenCalled();
+        // });
+    });
+
+    describe('When it has been run patch and it has called Model.findByIdAndUpdate', () => {
+        const spyModel = jest.spyOn(Robot, 'findByIdAndUpdate');
+        // test('Then, if the ID has been valid, it should be returned the updated robot', async () => {
+        //     const updateName = 'MyBot';
+        //     const result = await repository.patch(testIds[0], {
+        //         name: updateName,
+        //     });
+        //     expect(spyModel).toHaveBeenCalled();
+        //     expect(result.name).toEqual(updateName);
+        // });
+
+        test('Then, if the ID has been invalid, it should be thrown an error', async () => {
+            const updateName = 'MyBot';
+            expect(async () => {
+                await repository.patch(invalidId, { name: updateName });
+            }).rejects.toThrowError(mongoose.MongooseError);
+        });
+    });
+
+    describe('When it has been run delete and it has called Model.findByIdAndDelete', () => {
+        const spyModel = jest.spyOn(Robot, 'findByIdAndDelete');
+        test('Then, if the ID has been valid, it should be returned the deleted robot', async () => {
+            await repository.delete(testIds[0]);
+        });
+
+        test('Then if the ID has been bad formatted, it should be thrown a CastError error', async () => {
+            expect(async () => {
+                await repository.delete(badFormattedId);
+            }).rejects.toThrowError(mongoose.Error.CastError);
+            expect(spyModel).toHaveBeenCalled();
+        });
+
+        test('Then if the ID has been invalid, it should be thrown an error', async () => {
+            await repository.delete(invalidId);
+        });
+    });
+
+    afterAll(async () => {
+        await mongoose.disconnect();
+    });
 });
-
-export {};

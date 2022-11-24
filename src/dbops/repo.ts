@@ -6,7 +6,7 @@ export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
     post: (data: Partial<T>) => Promise<T>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    find: (data: any) => Promise<T>;
+    // find: (data: any) => Promise<T>;
 }
 
 export interface ExtraRepo<T> {
