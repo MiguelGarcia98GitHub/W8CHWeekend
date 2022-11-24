@@ -48,7 +48,7 @@ export class RobotRepository implements Repo<Robot> {
         const IDofResult = findIDofResult[0]._id;
         console.log('FIND ID OF RESULT:');
         console.log(findIDofResult);
-        console.log('FIND RESULT ID:');
+        console.log('FIND RESULT ID: ');
         console.log(findIDofResult._id);
         console.log('RESULT:');
         console.log(result);
