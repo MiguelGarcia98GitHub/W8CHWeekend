@@ -14,7 +14,7 @@ export class RobotController {
     }
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {
-            console.log('RobotController getAll');
+            console.log('RobotController getAll ');
             const robots = await this.repository.getAll();
             resp.json({ robots });
         } catch (error) {
